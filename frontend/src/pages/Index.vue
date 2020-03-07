@@ -1,14 +1,30 @@
 <template>
   <q-page class="flex flex-center">
-    <img
+      <img
       alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    >
+      src="~assets/werkenbij.png"
+      id="homeImg"
+      >
   </q-page>
 </template>
 
 <script>
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  mounted() {
+    this.$q.notify({
+      message: 'Please navigate to the Invoice System from menu',
+      position: 'top',
+      color: 'positive',
+      timeout: 2500
+    })
+  }
 }
 </script>
+
+<style>
+#homeImg {
+    width: 400px;
+    height: auto;
+}
+</style>

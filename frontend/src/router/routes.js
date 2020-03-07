@@ -3,8 +3,10 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    redirect: '/home',
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: 'home', name: 'Home', component: () => import('pages/Index.vue') },
+      { path: 'invoice', name: 'Invoices', component: () => import('pages/InvoiceSystem/Invoice.vue') }
     ]
   }
 ]

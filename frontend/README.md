@@ -1,4 +1,4 @@
-# Quasar App (frontend)
+# Invoice System (frontend)
 
 A Quasar Framework app
 

@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "Invoice System",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Marinos Zagkotsis <mzagkotsis@b-open.com>",

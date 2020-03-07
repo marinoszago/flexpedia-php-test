@@ -6,7 +6,8 @@ const routes = [
     redirect: '/home',
     children: [
       { path: 'home', name: 'Home', component: () => import('pages/Index.vue') },
-      { path: 'invoice', name: 'Invoices', component: () => import('pages/InvoiceSystem/Invoice.vue') }
+      { path: 'invoice', name: 'Invoices', component: () => import('pages/InvoiceReport/Invoice.vue') },
+      { path: 'customer', name: 'Customer', component: () => import('pages/CustomerReport/Customer.vue') }
     ]
   }
 ]

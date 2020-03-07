@@ -70,10 +70,16 @@ export default {
           link: '/home'
         },
         {
-          title: 'Invoice System',
+          title: 'Invoice Report',
           caption: 'Manage your invoices',
           icon: 'settings',
           link: '/invoice'
+        },
+        {
+          title: 'Customer Report',
+          caption: 'Manage your customers',
+          icon: 'people',
+          link: '/customer'
         }
       ]
     }

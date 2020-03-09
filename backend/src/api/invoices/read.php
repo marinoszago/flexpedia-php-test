@@ -5,11 +5,11 @@ header("Content-Type: application/json; charset=UTF-8");
   
 // database connection will be here
 // include database and object files
-include_once '../config/database.php';
+include_once '../database/DatabaseConnection.php';
 include_once '../objects/invoice.php';
   
 // instantiate database and invoice object
-$database = new Database();
+$database = new DatabaseConnection();
 $db = $database->getConnection();
   
 // initialize object

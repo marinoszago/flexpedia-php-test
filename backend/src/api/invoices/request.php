@@ -8,8 +8,8 @@ header("Content-Type: application/json; charset=UTF-8");
 // database connection will be here
 // include database and object files
 
-include('../../system/database/DatabaseConnection.php');
-include('../../system/controllers/InvoiceController.php');
+require('../../system/database/DatabaseConnection.php');
+require('../../system/controllers/InvoiceController.php');
   
 // instantiate database and invoice object
 $databaseInstance = DatabaseConnection::getInstance();

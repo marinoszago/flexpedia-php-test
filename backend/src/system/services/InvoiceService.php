@@ -1,7 +1,7 @@
 <?php
 
 
-include('../../system/objects/invoice.php');
+require('../../system/objects/invoice.php');
 
 class InvoiceService {
     public function __construct(){

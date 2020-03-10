@@ -33,11 +33,16 @@ class DatabaseConnection {
         
     }
     
+
+    //Applying the singleton pattern because it is a common way 
+    //of handling classes that are used for configuration 
+    //and we just want only one instance of it
+
     public static function getInstance()
     {
         if(!self::$instance)
         {
-            self::$instance = new ConnectDb();
+            self::$instance = new DatabaseConnection();
         }
     
         return self::$instance;
@@ -46,5 +51,10 @@ class DatabaseConnection {
     public function getConnection()
     {
         return $this->conn;
+    }
+
+    public function prepareQuery($query)
+    {
+        return $this->conn->query($query);
     }
 }

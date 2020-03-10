@@ -1,11 +1,13 @@
 <?php
-class Invoice{
+
+require '../interfaces/RequestInterface.php';
+
+class Invoice implements RequestInterface{
   
-    // database connection and table name
-    private $conn;
-    private $table_name = "invoices";
-  
-    // object properties
+    // Connection instance
+    private $connection;
+
+    // table columns
     public $id;
     public $client;
     public $invoice_amount;
@@ -15,30 +17,18 @@ class Invoice{
     public $invoice_date;
     public $created_at;
   
-    // constructor with $db as database connection
-    public function __construct($db){
-        $this->conn = $db;
+    public function __construct($connection){
+        $this->connection = $connection;
     }
 
-    // read invoices
-    function read(){
-    
-        // select all query
-        $query = "SELECT
-                    id, client, invoice_amount, invoice_amount_plus_vat,vat_rate,invoice_status,invoice_date,created_at
-                FROM
-                    " . $this->table_name . " 
-                    
-                ORDER BY
-                    created_at DESC";
-    
-        // prepare query statement
-        $stmt = $this->conn->prepare($query);
-    
-        // execute query
+    public function request($query){
+
+        $stmt = $this->connection->prepare($query);
+
         $stmt->execute();
-    
+
         return $stmt;
     }
+
 }
 ?>

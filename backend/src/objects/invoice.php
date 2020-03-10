@@ -1,11 +1,11 @@
 <?php
 
-require '../interfaces/RequestInterface.php';
-
-class Invoice implements RequestInterface{
+class Invoice{
   
     // Connection instance
     private $connection;
+
+    private $table_name = "invoices";
 
     // table columns
     public $id;
@@ -21,13 +21,9 @@ class Invoice implements RequestInterface{
         $this->connection = $connection;
     }
 
-    public function request($query){
-
-        $stmt = $this->connection->prepare($query);
-
-        $stmt->execute();
-
-        return $stmt;
+    
+    public function getTableName() {
+        return $this->table_name;
     }
 
 }

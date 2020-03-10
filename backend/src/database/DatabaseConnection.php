@@ -53,7 +53,12 @@ class DatabaseConnection {
         return $this->conn;
     }
 
-    public function prepareQuery($query)
+    public function setQueryFilter($filter)
+    {
+        return $this->conn->query($query);
+    }
+
+    public function setQueryOrder($order)
     {
         return $this->conn->query($query);
     }

@@ -12,7 +12,7 @@ class DatabaseConnection {
     private $name;
     private $port;
 
-    private $config_path = '../config/config.ini';
+    private $config_path = 'config/config.ini';
     
     // The db connection is established in the private constructor.
     public function __construct()

@@ -1,6 +1,7 @@
 <?php
 
-include_once '../objects/invoice.php';
+
+include('../../system/objects/invoice.php');
 
 class InvoiceService {
     public function __construct(){

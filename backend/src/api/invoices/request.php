@@ -7,8 +7,9 @@ header("Content-Type: application/json; charset=UTF-8");
   
 // database connection will be here
 // include database and object files
-include_once '../../database/DatabaseConnection.php';
-include_once '../../controllers/InvoiceController.php';
+
+include('../../system/database/DatabaseConnection.php');
+include('../../system/controllers/InvoiceController.php');
   
 // instantiate database and invoice object
 $databaseInstance = DatabaseConnection::getInstance();
@@ -17,8 +18,6 @@ $db = $databaseInstance->getConnection();
 // initialize object
 $invoiceController = new InvoiceController($db);
 
-// var_dump($_SERVER['REQUEST_METHOD']);
-// var_dump($_GET);
 
 //maybe send the data action 
 

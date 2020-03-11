@@ -26,7 +26,7 @@ $request_type = $_SERVER['REQUEST_METHOD'];
 if ($request_type == "GET"){
     
 
-    if (!isset($_GET["dataAction"])){
+    if (!isset($_GET) && !isset($_GET["dataAction"])){
         http_response_code(404);
       
         // tell the user no products found
@@ -37,16 +37,10 @@ if ($request_type == "GET"){
         return 0;
     }
 
-    $dataAction = $_GET["dataAction"];
+    $getArray = array();
+    $getArray = $_GET;
 
-    $data = (object)array();
-
-    if (isset($_GET['id'])){
-        $id = $_GET["id"];
-        $data->id = $id;
-    }
-
-    $stmt = $invoiceController->get($dataAction, $data, $db);
+    $stmt = $invoiceController->get($getArray, $db);
 
     
 }else if($request_type == "POST"){

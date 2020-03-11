@@ -6,9 +6,12 @@ class InvoiceController{
 
 
     //GET
-    public function get($dataAction, $dataObj, $dbConn) {
+    public function get($getArray, $dbConn) {
+
+        $dataAction = $getArray["dataAction"];
+
         $invoiceService = new InvoiceService();
-        $invoiceService->$dataAction($dbConn, $dataObj);
+        $invoiceService->$dataAction($dbConn, $getArray);
     }
     
     //POST

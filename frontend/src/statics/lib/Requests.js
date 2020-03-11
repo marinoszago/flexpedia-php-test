@@ -1,55 +1,76 @@
-import { axios } from 'axios'
+import axios from 'axios'
+
 
 const RequestService = {
-    get(data) {
-
-        console.log("DATA", data)
+    post(postObj) {
+        /**
+         * Perform an axios POST request
+         */
         return new Promise((resolve, reject) => {
-            axios.get(data.url, data.params)
-            .then(function (response) {
-                // handle success
-                console.log(response);
+            var requestObj = {}
+
+            _.each(postObj, function(value, key) {
+                requestObj[key] = value
+            })
+
+            requestObj["dataAction"] = postObj.dataAction
+
+            axios.post(postObj.url,requestObj)
+            .then((response) => {
                 resolve(response)
             })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-                reject(error)
+            .catch((error) => {
+                new Error("Request failed: "+error)
+                reject(error)        
             })
         })
     },
-    post() {
-        console.log("DATA", data)
+    get(getObj) {
+        /**
+         * Perform an axios GET request
+         */
+        console.log(getObj)
         return new Promise((resolve, reject) => {
-            axios.post(data.url, data.params)
-            .then(function (response) {
-                // handle success
-                console.log(response);
+
+            axios.get(getObj.url,{
+                params: getObj.params
+            })
+            .then((response) => {
                 resolve(response)
             })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-                reject(error)
+            .catch((error) => {
+                new Error("Request failed: "+error)
+                reject(error)        
             })
+        })
+
+    },
+    put() {
+        /**
+         * Perform an axios PUT request
+         */
+        return new Promise((resolve, reject) => {
+
         })
     },
     delete() {
-        console.log("DATA", data)
+        /**
+         * Perform an axios DELETE request
+         */
         return new Promise((resolve, reject) => {
-            axios.delete(data.url, data.params)
-            .then(function (response) {
-                // handle success
-                console.log(response);
-                resolve(response)
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-                reject(error)
-            })
+
+        })
+    },
+    patch() {
+        /**
+         * Perform an axios PATCH request
+         */
+        return new Promise((resolve, reject) => {
+
         })
     }
 }
 
 export default RequestService
+
+export { RequestService }

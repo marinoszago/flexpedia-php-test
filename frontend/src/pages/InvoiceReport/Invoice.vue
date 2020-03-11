@@ -6,12 +6,13 @@
       :columns="columnsTable"
       row-key="id"
       selection="single"
-      :selected.sync="selected"
+      :selected.sync="selectedItems"
       :filter="filter"
       :pagination.sync="pagination"
       :loading="loading"    
       @request="onRequest"
       v-if="this.invoices.data"
+      @selection="handleSelection"
     >
         <template v-slot:top-right>
             <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
@@ -32,7 +33,7 @@ export default {
     data() {
         return {
             filter: '',
-            selected: [],
+            selectedItems: [],
             loading: false,
             pagination: {
                 sortBy: 'id',
@@ -69,7 +70,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions("invoice", ['fetchPaginated','getRowCount']),
+        ...mapActions("invoice", ['fetchPaginated','getRowCount', 'updateSelected','clearSelected']),
         onRequest (props) {
 
             var ref = this
@@ -115,6 +116,13 @@ export default {
                 
             }, 1500)
         },
+        handleSelection(select) {
+            console.log(select)
+            if(select.added)
+                this.updateSelected(select)
+            else
+                this.clearSelected()
+        }
 
     },
     mounted(){

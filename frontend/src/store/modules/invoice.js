@@ -4,7 +4,8 @@ import { RequestService } from '../../statics/lib/Requests'
 export default {
       state: {
           invoices: {},
-          invoiceNumber: ''
+          invoiceNumber: '',
+          selected: []
       },
       getters: {},
       mutations: {
@@ -13,6 +14,12 @@ export default {
         },
         SET_ROW_COUNT: (state, data) => {
             Vue.set(state, "invoiceNumber", data.data)
+        },
+        UPDATE_SELECTED: (state, data) => {
+            Vue.set(state, "selected", data.rows)
+        },
+        CLEAR_SELECTED: (state) => {
+            Vue.set(state, "selected", [])
         }
       },
       actions: {
@@ -66,6 +73,12 @@ export default {
 				})
 			})
             
+        },
+        updateSelected(context, data) {
+            context.commit("UPDATE_SELECTED", data)
+        },
+        clearSelected(context) {
+            context.commit("CLEAR_SELECTED")
         }
       }
   }

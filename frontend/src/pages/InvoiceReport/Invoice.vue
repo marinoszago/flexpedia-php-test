@@ -120,8 +120,24 @@ export default {
         handleSelection(select) {
             if(select.added)
                 this.updateSelected(select)
-            else
+            else{
                 this.clearSelected()
+                let data = 
+                {
+                    "rows": {
+                        "client": "",
+                        "created_at": "",
+                        "invoice_amount": "",
+                        "invoice_amount_plus_vat" : "",
+                        "invoice_date": "",
+                        "invoice_status": "",
+                        "vat_rate": ""
+                    }
+                }
+                this.updateSelected(data)
+                
+            }
+                
         }
 
     },

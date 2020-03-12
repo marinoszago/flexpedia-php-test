@@ -134,9 +134,14 @@ export default {
 
             params["dataAction"] = "insertInvoice"
 
+            Object.keys(createData).forEach(key => {
+                params[key] = createData[key]
+            })
+
+
             data["params"] = params
             data["url"] = "invoices/request.php"
-
+            
             Loading.show()
             return new Promise((resolve,reject) => {
 				RequestService.post(data)
@@ -144,7 +149,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Created successfully",
+                            message: "Created successfully. Refresh the page",
                             position: "top",
                             color: "positive"
                         })
@@ -177,6 +182,76 @@ export default {
                         Loading.hide()
                         Notify.create({
                             message: "Deleted successfully",
+                            position: "top",
+                            color: "positive"
+                        })
+                    },2000)
+					resolve(response)
+				})
+				.catch((err) => {
+                    new Error("Request failed: "+err)
+                    setTimeout(function() {
+                        Loading.hide()
+                    },2000)
+                    reject(err)
+				})
+			})
+        },
+        exportDataToCsv(context) {
+            var data = {}
+            var params = {}
+
+            params["dataAction"] = "exportToCsv"
+
+            data["params"] = params
+            data["url"] = "invoices/request.php"
+            data["responseType"] = "blob"
+            data["filename_prefix"] = "invoice_transaction_"
+            
+
+            Loading.show()
+            return new Promise((resolve,reject) => {
+				RequestService.getBlob(data)
+				.then((response) => {
+                    setTimeout(function() {
+                        Loading.hide()
+                        Notify.create({
+                            message: "Exported successfully",
+                            position: "top",
+                            color: "positive"
+                        })
+                    },2000)
+					resolve(response)
+				})
+				.catch((err) => {
+                    new Error("Request failed: "+err)
+                    setTimeout(function() {
+                        Loading.hide()
+                    },2000)
+                    reject(err)
+				})
+			})
+        },
+        exportDataCustomerCSV(context) {
+            var data = {}
+            var params = {}
+
+            params["dataAction"] = "exportToCsvCustomerReport"
+
+            data["params"] = params
+            data["url"] = "invoices/request.php"
+            data["responseType"] = "blob"
+            data["filename_prefix"] = "customer_report_"
+            
+
+            Loading.show()
+            return new Promise((resolve,reject) => {
+				RequestService.getBlob(data)
+				.then((response) => {
+                    setTimeout(function() {
+                        Loading.hide()
+                        Notify.create({
+                            message: "Exported successfully",
                             position: "top",
                             color: "positive"
                         })

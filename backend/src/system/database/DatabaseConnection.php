@@ -53,6 +53,11 @@ class DatabaseConnection {
         return $this->conn;
     }
 
+    public function closeConnection()
+    {
+        return $this->conn = null;
+    }
+
     public function setQueryFilter($filter)
     {
         return $this->conn->query($query);

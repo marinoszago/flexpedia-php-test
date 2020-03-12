@@ -16,6 +16,10 @@ class Invoice{
     public $invoice_status;
     public $invoice_date;
     public $created_at;
+
+    public $total_invoiced;
+    public $total_paid;
+    public $total_outstanding;
   
     public function __construct($connection){
         $this->connection = $connection;
@@ -25,6 +29,7 @@ class Invoice{
     public function getTableName() {
         return $this->table_name;
     }
+
 
 }
 ?>

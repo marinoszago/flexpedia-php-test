@@ -25,7 +25,6 @@ class InvoiceController{
     //PATCH
     public function patch($patchArray, $dbConn) {
 
-        var_dump($patchArray);
         $dataAction = $patchArray["dataAction"];
 
         $invoiceService = new InvoiceService();

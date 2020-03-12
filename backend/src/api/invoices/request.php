@@ -1,20 +1,15 @@
 <?php
 
-// px ena request obj pou na dexete diafora
-// required headers
-header("Content-Type: application/json; charset=UTF-8");
 header('Accept: application/json');
+header("Content-Type: application/json; charset=UTF-8");
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-    // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-    // you want to allow, and if so:
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 1000');
 }
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-        // may also be using PUT, PATCH, HEAD etc
         header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE, PATCH");
     }
 
@@ -24,20 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
   
-// database connection will be here
-// include database and object files
 
 require('../../system/database/DatabaseConnection.php');
 require('../../system/controllers/InvoiceController.php');
   
-// instantiate database and invoice object
 $databaseInstance = DatabaseConnection::getInstance();
 $db = $databaseInstance->getConnection();
   
-// initialize object
 $invoiceController = new InvoiceController($db);
 
-//maybe send the data action 
 $request_type = $_SERVER['REQUEST_METHOD'];
 
 if ($request_type == "GET"){
@@ -62,6 +52,7 @@ if ($request_type == "GET"){
     
 }else if($request_type == "POST"){
     
+    $_POST = file_get_contents('php://input');
     if (!isset($_POST) && !isset($_POST["dataAction"])){
         http_response_code(404);
       
@@ -74,7 +65,7 @@ if ($request_type == "GET"){
     }
 
     $postArray = array();
-    $postArray = $_POST;
+    $postArray = json_decode($_POST, TRUE);
 
     $stmt = $invoiceController->post($postArray, $db);
 
@@ -123,4 +114,6 @@ if ($request_type == "GET"){
         array("message" => "405 Invalid request. Method not allowed")
     );
 }
+
+$db = $databaseInstance->closeConnection();
   

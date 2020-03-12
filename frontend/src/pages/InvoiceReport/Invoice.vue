@@ -78,6 +78,7 @@ export default {
             const filter = props.filter
 
             this.loading = true
+            this.$q.loading.show()
 
             // emulate server
             setTimeout(() => {
@@ -117,7 +118,6 @@ export default {
             }, 1500)
         },
         handleSelection(select) {
-            console.log(select)
             if(select.added)
                 this.updateSelected(select)
             else
@@ -129,9 +129,6 @@ export default {
         this.getRowCount()
     },
     created() {
-
-        
-
         this.onRequest({
             pagination: this.pagination,
             filter: undefined

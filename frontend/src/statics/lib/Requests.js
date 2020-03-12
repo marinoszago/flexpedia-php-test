@@ -29,7 +29,6 @@ const RequestService = {
         /**
          * Perform an axios GET request
          */
-        console.log(getObj)
         return new Promise((resolve, reject) => {
 
             axios.get(getObj.url,{
@@ -53,20 +52,34 @@ const RequestService = {
 
         })
     },
-    delete() {
+    delete(deleteObj) {
         /**
          * Perform an axios DELETE request
          */
         return new Promise((resolve, reject) => {
-
+            axios.delete(deleteObj.url,deleteObj.params)
+            .then((response) => {
+                resolve(response)
+            })
+            .catch((error) => {
+                new Error("Request failed: "+error)
+                reject(error)        
+            })
         })
     },
-    patch() {
+    patch(patchObj) {
         /**
          * Perform an axios PATCH request
          */
         return new Promise((resolve, reject) => {
-
+            axios.patch(patchObj.url,patchObj.params)
+            .then((response) => {
+                resolve(response)
+            })
+            .catch((error) => {
+                new Error("Request failed: "+error)
+                reject(error)        
+            })
         })
     }
 }

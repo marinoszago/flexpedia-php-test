@@ -213,6 +213,155 @@ class InvoiceService {
     
     
     }
+
+    public function insertInvoice($dbConn, $data) {
+        $invoice = new Invoice($dbConn);
+
+        if(isset($data["client"]) 
+            && isset($data["invoice_amount"]) 
+            && isset($data["invoice_amount_plus_vat"]) 
+            && isset($data["vat_rate"]) 
+            && isset($data["invoice_status"]) 
+            && isset($data["invoice_date"]) 
+            && isset($data["created_at"]))
+        {
+            $query = "INSERT INTO " .$invoice->getTableName()."
+                    ( 
+                        client, 
+                        invoice_amount,
+                        invoice_amount_plus_vat, 
+                        vat_rate, 
+                        invoice_status, 
+                        invoice_date, 
+                        created_at 
+                    )
+                    VALUES
+                    (
+                        :client,
+                        :invoice_amount,
+                        :invoice_amount_plus_vat,
+                        :vat_rate,
+                        :invoice_status,
+                        :invoice_date,
+                        :created_at
+                    )";
+            $stmt = $dbConn->prepare($query);
+
+            $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
+            $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
+            $stmt->bindParam(':vat_rate', $data["vat_rate"]);
+            $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
+            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // set response code - 200 OK
+            http_response_code(200);
+            
+            // show products data in json format
+            echo json_encode(
+                array("message" => "Invoice insert success")
+            );
+        }else{
+            
+            // set response code - 404 Not found
+            http_response_code(404);
+            
+            // tell the user no products found
+            echo json_encode(
+                array("message" => "Error: Unsuccessful insert of invoice. Please check the data again")
+            );
+        } 
+    }
+
+    public function updateInvoice($dbConn, $data) {
+        $invoice = new Invoice($dbConn);
+        
+        if(isset($data["id"]) && ($data["id"] > 0)
+            && isset($data["client"]) 
+            && isset($data["invoice_amount"]) 
+            && isset($data["invoice_amount_plus_vat"]) 
+            && isset($data["vat_rate"]) 
+            && isset($data["invoice_status"]) 
+            && isset($data["invoice_date"]) 
+            && isset($data["created_at"]))
+        {
+            $query = "UPDATE ".$invoice->getTableName()." SET 
+                    client = :client,
+                    invoice_amount = :invoice_amount,
+                    invoice_amount_plus_vat = :invoice_amount_plus_vat,
+                    vat_rate = :vat_rate,
+                    invoice_status = :invoice_status,
+                    invoice_date = :invoice_date,
+                    created_at = :created_at
+                WHERE id = :id";
+
+            $stmt = $dbConn->prepare($query);
+
+            $stmt->bindParam(':id', $data["id"]);
+            $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
+            $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
+            $stmt->bindParam(':vat_rate', $data["vat_rate"]);
+            $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
+            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            // set response code - 200 OK
+            http_response_code(200);
+            
+            // show products data in json format
+            echo json_encode(
+                array("message" => "Invoice update success")
+            );
+        }else{
+            
+            // set response code - 404 Not found
+            http_response_code(404);
+            
+            // tell the user no products found
+            echo json_encode(
+                array("message" => "Error: Unsuccessful update of invoice. Please check the data again")
+            );
+        } 
+    }
+
+    public function deleteInvoice($dbConn, $data) {
+        $invoice = new Invoice($dbConn);
+        
+        if(isset($data["id"]))
+        {
+            $query = "DELETE FROM ".$invoice->getTableName()."
+                WHERE id = :id";
+
+            $stmt = $dbConn->prepare($query);
+
+            $stmt->bindParam(':id', $data["id"]);
+
+            $stmt->execute();
+
+            // set response code - 200 OK
+            http_response_code(200);
+            
+            // show products data in json format
+            echo json_encode(
+                array("message" => "Invoice delete success")
+            );
+        }else{
+            
+            // set response code - 404 Not found
+            http_response_code(404);
+            
+            // tell the user no products found
+            echo json_encode(
+                array("message" => "Error: Unsuccessful delete of invoice. Please check the data again")
+            );
+        } 
+    }
 }
 
 ?>

@@ -60,7 +60,7 @@
           <q-select style="width:70%" v-model="selectedItems[index]" :options="options" :label="index" v-if="index === 'invoice_status'"/>
         </q-item>
         <q-item>
-          <q-btn color="primary" label="save" @click="saveItem"/>
+          <q-btn color="primary" label="Update" @click="updateInvoice"/>
         </q-item>
       </q-list>
     </q-drawer>
@@ -121,8 +121,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions("invoice", ["updateItem"]),
     editMode() {
       this.rightDrawerOpen = !this.rightDrawerOpen
+    },
+    updateInvoice() {
+      this.updateItem(this.selected[0])
     }
   }
 }

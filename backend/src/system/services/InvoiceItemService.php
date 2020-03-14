@@ -4,6 +4,11 @@
 require('../../system/objects/invoiceItem.php');
 require('../../system/objects/invoice.php');
 
+/**
+ * InvoiceItemService contains those functions that fetch data from database
+ * All of them use a database connection as a parameter and the data which required to perform the actions
+ */
+
 class InvoiceItemService {
     public function __construct(){
         

@@ -30,6 +30,10 @@ $invoiceItemController = new InvoiceItemController($db);
 
 $request_type = $_SERVER['REQUEST_METHOD'];
 
+/**
+ * For each method that is sent with the request perform the respected action of the controller
+ */
+
 if ($request_type == "GET"){
     
 

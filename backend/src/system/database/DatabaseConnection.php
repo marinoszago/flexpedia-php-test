@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * DatabaseConnection class contains the data base connectivity functionality
+ */
 class DatabaseConnection {
 
     protected $ini_array; 

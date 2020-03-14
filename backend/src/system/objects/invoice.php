@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Invoice contains the structure of an invoice object and holds information about the data
+ */
 class Invoice{
   
     // Connection instance

@@ -1,3 +1,7 @@
+/**
+ * An autoloader for modules of vuex
+ */
+
 import camelCase from 'lodash/camelCase'
 
 const requireModule = require.context('.', false, /\.js$/)

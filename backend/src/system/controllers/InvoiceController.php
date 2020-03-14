@@ -2,6 +2,10 @@
 
 require('../../system/services/InvoiceService.php');
 
+/**
+ * The InvoiceController class just handles the request and nothing else
+ */
+
 class InvoiceController{
 
 

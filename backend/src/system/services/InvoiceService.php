@@ -369,7 +369,7 @@ class InvoiceService {
 
         $query = "SELECT id, 
                         client, 
-                        invoice_amount
+                        invoice_amount_plus_vat
                  FROM " . $invoice->getTableName() . " 
                  
                  ORDER BY id, created_at ASC";

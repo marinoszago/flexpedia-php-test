@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
   
 
 require('../../system/database/DatabaseConnection.php');
-require('../../system/controllers/InvoiceController.php');
+require('../../system/controllers/InvoiceItemController.php');
   
 $databaseInstance = DatabaseConnection::getInstance();
 $db = $databaseInstance->getConnection();
   
-$invoiceController = new InvoiceController($db);
+$invoiceItemController = new InvoiceItemController($db);
 
 $request_type = $_SERVER['REQUEST_METHOD'];
 
@@ -47,7 +47,7 @@ if ($request_type == "GET"){
     $getArray = array();
     $getArray = $_GET;
 
-    $stmt = $invoiceController->get($getArray, $db);
+    $stmt = $invoiceItemController->get($getArray, $db);
 
     
 }else if($request_type == "POST"){
@@ -67,7 +67,7 @@ if ($request_type == "GET"){
     $postArray = array();
     $postArray = json_decode($_POST, TRUE);
 
-    $stmt = $invoiceController->post($postArray, $db);
+    $stmt = $invoiceItemController->post($postArray, $db);
 
 }else if($request_type == "DELETE"){
     $_DELETE = file_get_contents('php://input');
@@ -87,7 +87,7 @@ if ($request_type == "GET"){
     $deleteArray = array();
     $deleteArray = $_DELETE["source"];
 
-    $stmt = $invoiceController->delete($deleteArray, $db);
+    $stmt = $invoiceItemController->delete($deleteArray, $db);
     
 }else if($request_type == "PATCH"){
     $_PATCH = file_get_contents('php://input');
@@ -106,7 +106,7 @@ if ($request_type == "GET"){
     $patchArray = array();
     $patchArray = json_decode($_PATCH, TRUE);
 
-    $stmt = $invoiceController->patch($patchArray, $db);
+    $stmt = $invoiceItemController->patch($patchArray, $db);
 }else {
     http_response_code(404);
       

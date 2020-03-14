@@ -1,15 +1,15 @@
 <?php
 
 
-require('../../system/objects/invoice.php');
+require('../../system/objects/invoiceItem.php');
 
-class InvoiceService {
+class InvoiceItemService {
     public function __construct(){
         
     }
 
     public function getRowCount($dbConn) {
-        $invoice = new Invoice($dbConn);    
+        $invoice = new InvoiceItem($dbConn);    
         
         $query = "SELECT COUNT(*) AS ROW_COUNT
                  FROM " . $invoice->getTableName(). "";
@@ -40,22 +40,20 @@ class InvoiceService {
 
     }
 
-    public function getInvoices($dbConn, $data) {
+    public function getInvoiceItems($dbConn, $data) {
 
-        $invoice = new Invoice($dbConn);
+        $invoice = new InvoiceItem($dbConn);
         
         if(isset($data["startRow"]) && isset($data["fetchCount"]) && isset($data["filter"]) && $data["filter"] != ""){
                 $keyword = $data["filter"];
 
                 $query = "SELECT id, 
-                        client, 
-                        invoice_amount,
-                        invoice_amount_plus_vat, 
-                        vat_rate, invoice_status, 
-                        invoice_date, 
-                        created_at 
+                            invoice_id,
+                            name,
+                            amount,
+                            created_at
                  FROM " . $invoice->getTableName() . " 
-                 WHERE client LIKE CONCAT('%', :keyword, '%')
+                 WHERE name LIKE CONCAT('%', :keyword, '%')
                  ORDER BY created_at ASC
                  LIMIT :fetchCount OFFSET :startRow";
 
@@ -67,11 +65,9 @@ class InvoiceService {
 
         }if(isset($data["startRow"]) && isset($data["fetchCount"]) && (!isset($data["filter"]) || $data["filter"] == "")){
             $query = "SELECT id, 
-                        client, 
-                        invoice_amount,
-                        invoice_amount_plus_vat, 
-                        vat_rate, invoice_status, 
-                        invoice_date, 
+                        invoice_id,
+                        name,
+                        amount,
                         created_at 
                  FROM " . $invoice->getTableName() . " 
                  ORDER BY created_at ASC
@@ -84,12 +80,10 @@ class InvoiceService {
 
         }else if($data["filter"] == ""){
             $query = "SELECT id, 
-                        client, 
-                        invoice_amount,
-                        invoice_amount_plus_vat, 
-                        vat_rate, invoice_status, 
-                        invoice_date, 
-                        created_at 
+                        invoice_id,
+                        name,
+                        amount,
+                        created_at
                  FROM " . $invoice->getTableName() . " 
                  
                  ORDER BY created_at ASC";
@@ -114,12 +108,9 @@ class InvoiceService {
           
                 $invoice_item=array(
                     "id" => $id,
-                    "client" => $client,
-                    "invoice_amount" => $invoice_amount,
-                    "invoice_amount_plus_vat" => $invoice_amount_plus_vat,
-                    "vat_rate" => $vat_rate,
-                    "invoice_status" => $invoice_status,
-                    "invoice_date" => $invoice_date,
+                    "invoice_id" => $invoice_id,
+                    "name" => $name,
+                    "amount" => $amount,
                     "created_at" => $created_at
                 );
           
@@ -146,19 +137,16 @@ class InvoiceService {
     }
 
     //PDO encapsulate bind  param
-    public function getInvoice($dbConn, $data) {
+    public function getInvoiceItem($dbConn, $data) {
 
-        $invoice = new Invoice($dbConn);
+        $invoice = new InvoiceItem($dbConn);
 
         $query = "SELECT id, 
-                        client, 
-                        invoice_amount,
-                        invoice_amount_plus_vat, 
-                        vat_rate, 
-                        invoice_status, 
-                        invoice_date, 
-                        created_at 
-                    FROM " . $invoice->getTableName() . " 
+                    invoice_id,
+                    name,
+                    amount,
+                    created_at
+                FROM " . $invoice->getTableName() . " 
                     WHERE id = :id
                     ORDER BY created_at ASC";
 
@@ -183,12 +171,9 @@ class InvoiceService {
             
                 $invoice_item=array(
                     "id" => $id,
-                    "client" => $client,
-                    "invoice_amount" => $invoice_amount,
-                    "invoice_amount_plus_vat" => $invoice_amount_plus_vat,
-                    "vat_rate" => $vat_rate,
-                    "invoice_status" => $invoice_status,
-                    "invoice_date" => $invoice_date,
+                    "invoice_id" => $invoice_id,
+                    "name" => $name,
+                    "amount" => $amount,
                     "created_at" => $created_at
                 );
             
@@ -214,46 +199,37 @@ class InvoiceService {
     
     }
 
-    public function insertInvoice($dbConn, $data) {
-        $invoice = new Invoice($dbConn);
+    public function insertInvoiceItem($dbConn, $data) {
+        $invoice = new InvoiceItem($dbConn);
 
-        if(isset($data["client"]) 
-            && isset($data["invoice_amount"]) 
-            && isset($data["invoice_amount_plus_vat"]) 
-            && isset($data["vat_rate"]) 
-            && isset($data["invoice_status"]) 
-            && isset($data["invoice_date"]) 
-            && isset($data["created_at"]))
+        if(isset($data["name"]) 
+            && isset($data["invoice_id"]) 
+            && isset($data["amount"]) 
+            && isset($data["created_at"]) 
+        )
         {
             $query = "INSERT INTO " .$invoice->getTableName()."
                     ( 
-                        client, 
-                        invoice_amount,
-                        invoice_amount_plus_vat, 
-                        vat_rate, 
-                        invoice_status, 
-                        invoice_date, 
-                        created_at 
+                        name, 
+                        invoice_id,
+                        amount, 
+                        created_at
+                        
                     )
                     VALUES
                     (
-                        :client,
-                        :invoice_amount,
-                        :invoice_amount_plus_vat,
-                        :vat_rate,
-                        :invoice_status,
-                        :invoice_date,
+                        :name,
+                        :invoice_id,
+                        :amount,
                         :created_at
+                        
                     )";
             $stmt = $dbConn->prepare($query);
 
-            $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
-            $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
-            $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
-            $stmt->bindParam(':vat_rate', $data["vat_rate"]);
-            $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
-            $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
-            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
+            $stmt->bindParam(':name', $data["name"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_id', $data["invoice_id"]);
+            $stmt->bindParam(':amount', $data["amount"]);
+            $stmt->bindParam(':created_at', $data["created_at"]);
 
             $stmt->execute();
 
@@ -276,37 +252,29 @@ class InvoiceService {
         } 
     }
 
-    public function updateInvoice($dbConn, $data) {
-        $invoice = new Invoice($dbConn);
+    public function updateInvoiceItem($dbConn, $data) {
+        $invoice = new InvoiceItem($dbConn);
         
         if(isset($data["id"]) && ($data["id"] > 0)
-            && isset($data["client"]) 
-            && isset($data["invoice_amount"]) 
-            && isset($data["invoice_amount_plus_vat"]) 
-            && isset($data["vat_rate"]) 
-            && isset($data["invoice_status"]) 
-            && isset($data["invoice_date"]) 
-            && isset($data["created_at"]))
+            && isset($data["name"]) 
+            && isset($data["invoice_id"]) 
+            && isset($data["amount"]) 
+            && isset($data["created_at"]) 
+        )
         {
             $query = "UPDATE ".$invoice->getTableName()." SET 
-                    client = :client,
-                    invoice_amount = :invoice_amount,
-                    invoice_amount_plus_vat = :invoice_amount_plus_vat,
-                    vat_rate = :vat_rate,
-                    invoice_status = :invoice_status,
-                    invoice_date = :invoice_date,
+                    name = :name,
+                    invoice_id = :invoice_id,
+                    amount = :amount,
                     created_at = :created_at
                 WHERE id = :id";
 
             $stmt = $dbConn->prepare($query);
 
             $stmt->bindParam(':id', $data["id"]);
-            $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
-            $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
-            $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
-            $stmt->bindParam(':vat_rate', $data["vat_rate"]);
-            $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
-            $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
+            $stmt->bindParam(':name', $data["name"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_id', $data["invoice_id"]);
+            $stmt->bindParam(':amount', $data["amount"]);
             $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
 
             $stmt->execute();
@@ -330,8 +298,8 @@ class InvoiceService {
         } 
     }
 
-    public function deleteInvoice($dbConn, $data) {
-        $invoice = new Invoice($dbConn);
+    public function deleteInvoiceItem($dbConn, $data) {
+        $invoice = new InvoiceItem($dbConn);
         
         if(isset($data["id"]))
         {
@@ -364,11 +332,13 @@ class InvoiceService {
     }
 
     public function exportToCsv($dbConn, $data = null) {
-        $invoice = new Invoice($dbConn);
+        $invoice = new InvoiceItem($dbConn);
 
         $query = "SELECT id, 
-                        client, 
-                        invoice_amount
+                        invoice_id, 
+                        name,
+                        amount,
+                        created_at
                  FROM " . $invoice->getTableName() . " 
                  
                  ORDER BY id, created_at ASC";
@@ -392,75 +362,17 @@ class InvoiceService {
 
             $output = fopen("php://output", "w");
 
-            fputcsv($output, array('Invoice ID', 'Company Name', 'Invoice Amount'));
+            fputcsv($output, array('Invoice Item ID', 'Invoice ID', 'Name', 'Amount', 'Created At'));
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         
                 extract($row);
           
                 $invoice_item=array(
                     "id" => $id,
-                    "client" => $client,
-                    "invoice_amount_plus_vat" => $invoice_amount_plus_vat
-                );
-                
-                array_push($invoices_arr["data"], $invoice_item);
-                fputcsv($output, $invoice_item);
-                
-            }
-            fclose($output);   
-          
-            // set response code - 200 OK
-            http_response_code(200);
-
-        }else{
-          
-            // set response code - 404 Not found
-            http_response_code(404);
-          
-            // tell the user no products found
-            echo json_encode(
-                array("message" => "No invoices found.")
-            );
-        } 
-    }
-
-    public function exportToCsvCustomerReport($dbConn, $data = null) {
-        $invoice = new Invoice($dbConn);
-
-        $query = "SELECT client, SUM(invoice_amount) as total_invoiced, 
-                SUM(CASE WHEN invoice_status='paid' THEN invoice_amount_plus_vat ELSE 0 END) as total_paid, 
-                SUM(CASE WHEN invoice_status='unpaid' THEN invoice_amount_plus_vat ELSE 0 END) as total_outstanding 
-                FROM ".$invoice->getTableName()." 
-                GROUP BY client";
-        $stmt = $dbConn->prepare($query);
-
-        $stmt->execute();
-
-        $num = $stmt->rowCount();
-      
-        // check if more than 0 record found
-        if($num>0){
-            
-            $invoices_arr=array();
-            $invoices_arr["data"]=array();
-          
-            header("Content-Type: text/csv");
-            header("Cache-Control: no-cache, no-store, must-revalidate");
-            header("Pragma: no-cache");
-            header("Expires: 0");
-
-            $output = fopen("php://output", "w");
-
-            fputcsv($output, array('Comapny Name', 'Total Invoiced Amount', 'Total Amount Paid', 'Total Amount Outstanding'));
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        
-                extract($row);
-          
-                $invoice_item=array(
-                    "client" => $client,
-                    "total_invoiced" => $total_invoiced,
-                    "total_paid" => $total_paid,
-                    "total_outstanding" => $total_outstanding
+                    "invoice_id" => $invoice_id,
+                    "name" => $name,
+                    "amount" => $amount,
+                    "created_at" => $created_at
                 );
                 
                 array_push($invoices_arr["data"], $invoice_item);

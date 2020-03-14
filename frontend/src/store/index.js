@@ -4,5 +4,18 @@ import modules from './modules'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
-    modules
+    modules,
+    state: {
+        dialogVisible: false
+    },
+    actions: {
+        setDialogVisible (context, data){
+            context.commit("SET_DIALOG_VISIBLE", data)
+        }
+    },
+    mutations: {
+        SET_DIALOG_VISIBLE: (state, data) => {
+            Vue.set(state, "dialogVisible", data)
+        }
+    }
 })

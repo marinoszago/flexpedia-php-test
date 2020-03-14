@@ -75,7 +75,12 @@ const RequestService = {
          * Perform an axios DELETE request
          */
         return new Promise((resolve, reject) => {
-            axios.delete(deleteObj.url,deleteObj.params)
+            axios.delete(deleteObj.url, {
+            headers: {},
+            data: {
+                    source: deleteObj.params
+                }
+            })
             .then((response) => {
                 resolve(response)
             })

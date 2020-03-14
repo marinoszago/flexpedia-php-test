@@ -50,14 +50,20 @@ export default {
             let columns = []
             if(this.invoices.data){
                 let json = {}
+                let n = 0;
                 Object.keys(this.invoices.data[0]).forEach(function(key) {
                     json["name"] = key
-                    json["label"] = key.toUpperCase()
+                    json["label"] = key.toLowerCase()
                     json["align"] = "left"
                     json["sortable"] = false
                     json["field"] = key
+                    if(n % 2 == 0){
+                        json["classes"] = 'bg-grey-2 ellipsis'
+                        json["headerClasses"] = 'bg-teal text-white'
+                    }
+                        
                     columns.push(json)
-
+                    n++;
                     json = {}
                 });
             }
@@ -71,6 +77,7 @@ export default {
     },
     methods: {
         ...mapActions("invoice", ['fetchPaginated','getRowCount', 'updateSelected','clearSelected']),
+        ...mapActions(["setDialogVisible"]),
         onRequest (props) {
 
             var ref = this
@@ -118,6 +125,8 @@ export default {
             }, 1500)
         },
         handleSelection(select) {
+            this.setDialogVisible(false)
+            
             if(select.added)
                 this.updateSelected(select)
             else{

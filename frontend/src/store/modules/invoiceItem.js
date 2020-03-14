@@ -4,32 +4,32 @@ import { Notify, Loading } from 'quasar'
 
 export default {
       state: {
-          invoices: {},
-          invoiceNumber: '',
-          selected: [],
-          forPagination: {}
+          invoiceItems: {},
+          invoiceItemsNumber: '',
+          selectedInvoiceItems: [],
+          forPaginationInvoiceItem: {}
       },
       getters: {},
       mutations: {
-        FETCH_PAGINATED: (state, [data, paramsObj]) => {
-            Vue.set(state, "invoices", data)
-            Vue.set(state, "forPagination", paramsObj)
+        FETCH_PAGINATED_INVOICE_ITEM: (state, [data, paramsObj]) => {
+            Vue.set(state, "invoiceItems", data)
+            Vue.set(state, "forPaginationInvoiceItem", paramsObj)
         },
         SET_ROW_COUNT: (state, data) => {
-            Vue.set(state, "invoiceNumber", data.data)
+            Vue.set(state, "invoiceItemsNumber", data.data)
         },
-        UPDATE_SELECTED: (state, data) => {
-            Vue.set(state, "selected", data.rows)
+        UPDATE_SELECTED_INVOICE_ITEM: (state, data) => {
+            Vue.set(state, "selectedInvoiceItems", data.rows)
         },
-        CLEAR_SELECTED: (state) => {
-            Vue.set(state, "selected", [])
+        CLEAR_SELECTED_INVOICE_ITEM: (state) => {
+            Vue.set(state, "selectedInvoiceItems", [])
         },
         RESOLVE_UPDATE: (state) => {
             
         }
       },
       actions: {
-        fetchPaginated (context, paramsObj) {
+        fetchPaginatedInvoiceItem (context, paramsObj) {
 
             var data = {}
             var params = {}
@@ -38,15 +38,15 @@ export default {
                 params[element] = paramsObj[element]
             });
 
-            params["dataAction"] = "getInvoices"
+            params["dataAction"] = "getInvoiceItems"
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
             
             return new Promise((resolve,reject) => {
 				RequestService.get(data)
 				.then((response) => {
-                    context.commit("FETCH_PAGINATED", [response.data, paramsObj])
+                    context.commit("FETCH_PAGINATED_INVOICE_ITEM", [response.data, paramsObj])
                     setTimeout(function() {
                         Loading.hide()
                     },2000)
@@ -70,7 +70,7 @@ export default {
             params["dataAction"] = "getRowCount"
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
 
             return new Promise((resolve,reject) => {
 				RequestService.get(data)
@@ -85,24 +85,24 @@ export default {
 			})
             
         },
-        updateSelected(context, data) {
-            context.commit("UPDATE_SELECTED", data)
+        updateSelectedInvoiceItem(context, data) {
+            context.commit("UPDATE_SELECTED_INVOICE_ITEM", data)
         },
-        clearSelected(context) {
-            context.commit("CLEAR_SELECTED")
+        clearSelectedInvoiceItem(context) {
+            context.commit("CLEAR_SELECTED_INVOICE_ITEM")
         },
-        updateItem(context, updateData) {
+        updateInvoiceItem(context, updateData) {
             var data = {}
             var params = {}
 
-            params["dataAction"] = "updateInvoice"
+            params["dataAction"] = "updateInvoiceItem"
 
             Object.keys(updateData).forEach(key => {
                 params[key] = updateData[key]
             })
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
 
             Loading.show()
             return new Promise((resolve,reject) => {
@@ -128,11 +128,11 @@ export default {
 				})
 			})
         },
-        createItem(context, createData) {
+        createInvoiceItem(context, createData) {
             var data = {}
             var params = {}
 
-            params["dataAction"] = "insertInvoice"
+            params["dataAction"] = "insertInvoiceItem"
 
             Object.keys(createData).forEach(key => {
                 params[key] = createData[key]
@@ -140,7 +140,7 @@ export default {
 
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
             
             Loading.show()
             return new Promise((resolve,reject) => {
@@ -165,7 +165,7 @@ export default {
 				})
 			})
         },
-        deleteItem(context, deleteData) {
+        deleteInvoiceItem(context, deleteData) {
             var data = {}
             var params = {}
 
@@ -173,10 +173,10 @@ export default {
                 params[key] = deleteData[key]
             })
 
-            params["dataAction"] = "deleteInvoice"
+            params["dataAction"] = "deleteInvoiceItem"
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
 
             Loading.show()
             return new Promise((resolve,reject) => {
@@ -201,51 +201,16 @@ export default {
 				})
 			})
         },
-        exportDataToCsv(context) {
+        exportDataToCsvItems(context) {
             var data = {}
             var params = {}
 
             params["dataAction"] = "exportToCsv"
 
             data["params"] = params
-            data["url"] = "invoices/request.php"
+            data["url"] = "invoiceItems/request.php"
             data["responseType"] = "blob"
-            data["filename_prefix"] = "invoice_transaction_"
-            
-
-            Loading.show()
-            return new Promise((resolve,reject) => {
-				RequestService.getBlob(data)
-				.then((response) => {
-                    setTimeout(function() {
-                        Loading.hide()
-                        Notify.create({
-                            message: "Exported successfully",
-                            position: "top",
-                            color: "positive"
-                        })
-                    },2000)
-					resolve(response)
-				})
-				.catch((err) => {
-                    new Error("Request failed: "+err)
-                    setTimeout(function() {
-                        Loading.hide()
-                    },2000)
-                    reject(err)
-				})
-			})
-        },
-        exportDataCustomerCSV(context) {
-            var data = {}
-            var params = {}
-
-            params["dataAction"] = "exportToCsvCustomerReport"
-
-            data["params"] = params
-            data["url"] = "invoices/request.php"
-            data["responseType"] = "blob"
-            data["filename_prefix"] = "customer_report_"
+            data["filename_prefix"] = "invoice_items_transaction_"
             
 
             Loading.show()

@@ -26,7 +26,7 @@
             <q-btn color="white" flat icon="edit" v-if="this.selectedInvoiceItems.length > 0" @click="editModeInvoice"/>
             <q-btn color="white" flat icon="add" v-else @click="addModeInvoiceItem"/>
             <q-btn color="red" flat icon="delete" v-if="this.selectedInvoiceItems.length > 0" @click="deleteMode"/>
-            <q-btn color="white" flat label="Invoice Items" icon="save_alt" @click="exportCsvInvoiceItem"/>
+            <q-btn color="white" flat label="Invoice Items with clients" icon="save_alt" @click="exportCsvInvoiceItem"/>
         </div>
         <div v-else>Written by Marinos Zagkotsis</div>
       </q-toolbar>

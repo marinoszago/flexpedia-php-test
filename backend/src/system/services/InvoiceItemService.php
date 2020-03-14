@@ -2,6 +2,7 @@
 
 
 require('../../system/objects/invoiceItem.php');
+require('../../system/objects/invoice.php');
 
 class InvoiceItemService {
     public function __construct(){
@@ -9,10 +10,10 @@ class InvoiceItemService {
     }
 
     public function getRowCount($dbConn) {
-        $invoice = new InvoiceItem($dbConn);    
+        $invoiceItem = new InvoiceItem($dbConn);    
         
         $query = "SELECT COUNT(*) AS ROW_COUNT
-                 FROM " . $invoice->getTableName(). "";
+                 FROM " . $invoiceItem->getTableName(). "";
 
         $stmt = $dbConn->prepare($query);
 
@@ -34,7 +35,7 @@ class InvoiceItemService {
           
             // tell the user no products found
             echo json_encode(
-                array("message" => "No invoices found.")
+                array("message" => "No invoice items found.")
             );
         } 
 
@@ -42,7 +43,7 @@ class InvoiceItemService {
 
     public function getInvoiceItems($dbConn, $data) {
 
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
         
         if(isset($data["startRow"]) && isset($data["fetchCount"]) && isset($data["filter"]) && $data["filter"] != ""){
                 $keyword = $data["filter"];
@@ -52,9 +53,9 @@ class InvoiceItemService {
                             name,
                             amount,
                             created_at
-                 FROM " . $invoice->getTableName() . " 
+                 FROM " . $invoiceItem->getTableName() . " 
                  WHERE name LIKE CONCAT('%', :keyword, '%')
-                 ORDER BY created_at ASC
+                 ORDER BY id, created_at ASC
                  LIMIT :fetchCount OFFSET :startRow";
 
             $stmt = $dbConn->prepare($query);
@@ -69,8 +70,8 @@ class InvoiceItemService {
                         name,
                         amount,
                         created_at 
-                 FROM " . $invoice->getTableName() . " 
-                 ORDER BY created_at ASC
+                 FROM " . $invoiceItem->getTableName() . " 
+                 ORDER BY id, created_at ASC
                  LIMIT :fetchCount OFFSET :startRow";
 
             $stmt = $dbConn->prepare($query);
@@ -84,9 +85,9 @@ class InvoiceItemService {
                         name,
                         amount,
                         created_at
-                 FROM " . $invoice->getTableName() . " 
+                 FROM " . $invoiceItem->getTableName() . " 
                  
-                 ORDER BY created_at ASC";
+                 ORDER BY id, created_at ASC";
 
             $stmt = $dbConn->prepare($query);
         }
@@ -129,7 +130,7 @@ class InvoiceItemService {
           
             // tell the user no products found
             echo json_encode(
-                array("message" => "No invoices found.")
+                array("message" => "No invoice items found.")
             );
         } 
 
@@ -139,14 +140,14 @@ class InvoiceItemService {
     //PDO encapsulate bind  param
     public function getInvoiceItem($dbConn, $data) {
 
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
 
         $query = "SELECT id, 
                     invoice_id,
                     name,
                     amount,
                     created_at
-                FROM " . $invoice->getTableName() . " 
+                FROM " . $invoiceItem->getTableName() . " 
                     WHERE id = :id
                     ORDER BY created_at ASC";
 
@@ -192,7 +193,7 @@ class InvoiceItemService {
             
             // tell the user no products found
             echo json_encode(
-                array("message" => "No invoices found.")
+                array("message" => "No invoice items found.")
             );
         } 
     
@@ -200,7 +201,7 @@ class InvoiceItemService {
     }
 
     public function insertInvoiceItem($dbConn, $data) {
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
 
         if(isset($data["name"]) 
             && isset($data["invoice_id"]) 
@@ -208,7 +209,7 @@ class InvoiceItemService {
             && isset($data["created_at"]) 
         )
         {
-            $query = "INSERT INTO " .$invoice->getTableName()."
+            $query = "INSERT INTO " .$invoiceItem->getTableName()."
                     ( 
                         name, 
                         invoice_id,
@@ -238,7 +239,7 @@ class InvoiceItemService {
             
             // show products data in json format
             echo json_encode(
-                array("message" => "Invoice insert success")
+                array("message" => "Invoice item insert success")
             );
         }else{
             
@@ -247,13 +248,13 @@ class InvoiceItemService {
             
             // tell the user no products found
             echo json_encode(
-                array("message" => "Error: Unsuccessful insert of invoice. Please check the data again")
+                array("message" => "Error: Unsuccessful insert of invoice item. Please check the data again")
             );
         } 
     }
 
     public function updateInvoiceItem($dbConn, $data) {
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
         
         if(isset($data["id"]) && ($data["id"] > 0)
             && isset($data["name"]) 
@@ -262,7 +263,7 @@ class InvoiceItemService {
             && isset($data["created_at"]) 
         )
         {
-            $query = "UPDATE ".$invoice->getTableName()." SET 
+            $query = "UPDATE ".$invoiceItem->getTableName()." SET 
                     name = :name,
                     invoice_id = :invoice_id,
                     amount = :amount,
@@ -284,7 +285,7 @@ class InvoiceItemService {
             
             // show products data in json format
             echo json_encode(
-                array("message" => "Invoice update success")
+                array("message" => "Invoice item update success")
             );
         }else{
             
@@ -293,17 +294,17 @@ class InvoiceItemService {
             
             // tell the user no products found
             echo json_encode(
-                array("message" => "Error: Unsuccessful update of invoice. Please check the data again")
+                array("message" => "Error: Unsuccessful update of invoice item. Please check the data again")
             );
         } 
     }
 
     public function deleteInvoiceItem($dbConn, $data) {
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
         
         if(isset($data["id"]))
         {
-            $query = "DELETE FROM ".$invoice->getTableName()."
+            $query = "DELETE FROM ".$invoiceItem->getTableName()."
                 WHERE id = :id";
 
             $stmt = $dbConn->prepare($query);
@@ -317,7 +318,7 @@ class InvoiceItemService {
             
             // show products data in json format
             echo json_encode(
-                array("message" => "Invoice delete success")
+                array("message" => "Invoice item delete success")
             );
         }else{
             
@@ -326,21 +327,23 @@ class InvoiceItemService {
             
             // tell the user no products found
             echo json_encode(
-                array("message" => "Error: Unsuccessful delete of invoice. Please check the data again")
+                array("message" => "Error: Unsuccessful delete of invoice item. Please check the data again")
             );
         } 
     }
 
     public function exportToCsv($dbConn, $data = null) {
-        $invoice = new InvoiceItem($dbConn);
+        $invoiceItem = new InvoiceItem($dbConn);
+        $invoice = new Invoice($dbConn);
 
-        $query = "SELECT id, 
-                        invoice_id, 
-                        name,
-                        amount,
-                        created_at
-                 FROM " . $invoice->getTableName() . " 
-                 
+        $query = "SELECT ".$invoiceItem->getTableName().".id, 
+                        ".$invoiceItem->getTableName().".invoice_id, 
+                        ".$invoice->getTableName().".client,
+                        ".$invoiceItem->getTableName().".name,
+                        ".$invoiceItem->getTableName().".amount,
+                        ".$invoiceItem->getTableName().".created_at
+                 FROM " . $invoiceItem->getTableName() . " 
+                 LEFT JOIN ".$invoice->getTableName()." ON ".$invoice->getTableName().".id = ".$invoiceItem->getTableName().".invoice_id
                  ORDER BY id, created_at ASC";
 
         $stmt = $dbConn->prepare($query);
@@ -362,7 +365,7 @@ class InvoiceItemService {
 
             $output = fopen("php://output", "w");
 
-            fputcsv($output, array('Invoice Item ID', 'Invoice ID', 'Name', 'Amount', 'Created At'));
+            fputcsv($output, array("Invoice Item ID", "Invoice ID", "Client name", "Invoice Item Name", "Invoice Item Amount", "Created At"));
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         
                 extract($row);
@@ -370,6 +373,7 @@ class InvoiceItemService {
                 $invoice_item=array(
                     "id" => $id,
                     "invoice_id" => $invoice_id,
+                    "client" => $client,
                     "name" => $name,
                     "amount" => $amount,
                     "created_at" => $created_at
@@ -391,7 +395,7 @@ class InvoiceItemService {
           
             // tell the user no products found
             echo json_encode(
-                array("message" => "No invoices found.")
+                array("message" => "No invoice items found.")
             );
         } 
     }

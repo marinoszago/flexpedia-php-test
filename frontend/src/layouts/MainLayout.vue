@@ -65,9 +65,8 @@
       <q-list v-if="this.selected.length > 0 && this.selectedInvoiceItems.length == 0">
         <q-item v-for="(item, index) in selectedItems" :key="index" >
           <q-input :rules="[val => !!val || 'Field is required']" type='text' v-model="selectedItems[index]" :label="index" v-if="index == 'client'" clearable/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='datetime' stack-label :label="index" filled v-model="selectedItems[index]" mask="datetime"  v-else-if="index == 'created_at'"/>
           <q-input :rules="[val => !!val || 'Field is required']" type='date' stack-label :label="index" filled v-model="selectedItems[index]" mask="date"  v-else-if="index == 'invoice_date'"/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedItems[index]" :label="index" v-else-if="index != 'id' && index != 'invoice_status'" clearable/>
+          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedItems[index]" :label="index" v-else-if="index != 'id' && index != 'invoice_status' && index != 'created_at' && index != 'invoice_amount_plus_vat'" clearable/>
           <q-select :rules="[val => !!val || 'Field is required']" style="width:70%" v-model="selectedItems[index]" :options="options" :label="index" v-if="index === 'invoice_status'"/>
         </q-item>
         <q-item>
@@ -77,9 +76,8 @@
       <q-list v-else-if="this.selected && this.selectedInvoiceItems.length == 0">
         <q-item v-for="item in Object.keys(selected)" :key="item" >
           <q-input :rules="[val => !!val || 'Field is required']" type='text' v-model="selected[item]" :label="item" v-if="item == 'client'" clearable/>
-            <q-input :rules="[val => !!val || 'Field is required']" type='date' stack-label :label="item" filled v-model="selected[item]" mask="date"  v-else-if="item == 'invoice_date'"/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='datetime' stack-label :label="item" filled v-model="selected[item]" mask="datetime"  v-else-if="item == 'created_at'"/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selected[item]" :label="item" v-else-if="item != 'id' && item != 'invoice_status'" clearable/>
+          <q-input :rules="[val => !!val || 'Field is required']" type='date' stack-label :label="item" filled v-model="selected[item]" mask="date"  v-else-if="item == 'invoice_date'"/>
+          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selected[item]" :label="item" v-else-if="item != 'id' && item != 'invoice_status' && item != 'created_at' && item != 'invoice_amount_plus_vat'" clearable/>
           <q-select :rules="[val => !!val || 'Field is required']" style="width:70%" v-model="selected[item]" :options="options" :label="item" v-if="item === 'invoice_status'"/>
         </q-item>
         <q-item>
@@ -89,8 +87,7 @@
       <q-list v-else-if="this.selectedInvoiceItems.length > 0 && this.selected.length == 0">
         <q-item v-for="(item, index) in selectedInvoiceItemsComp" :key="index" >
           <q-input :rules="[val => !!val || 'Field is required']" type='text' v-model="selectedInvoiceItemsComp[index]" :label="index" v-if="index == 'name'" clearable/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='datetime' stack-label :label="index" filled v-model="selectedInvoiceItemsComp[index]" mask="datetime"  v-else-if="index == 'created_at'"/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedInvoiceItemsComp[index]" :label="index" v-else-if="index != 'id'" clearable/>
+          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedInvoiceItemsComp[index]" :label="index" v-else-if="index != 'id' && index != 'created_at'" clearable/>
         </q-item>
         <q-item>
           <q-btn color="primary" label="Update invoice item" @click="updateItemInvoice"/>
@@ -99,8 +96,7 @@
       <q-list v-else-if="this.selectedInvoiceItems && this.selected.length == 0">
         <q-item v-for="item in Object.keys(selectedInvoiceItems)" :key="item" >
           <q-input :rules="[val => !!val || 'Field is required']" type='text' v-model="selectedInvoiceItems[item]" :label="item" v-if="item == 'name'" clearable/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='datetime' stack-label :label="item" filled v-model="selectedInvoiceItems[item]" mask="datetime"  v-else-if="item == 'created_at'"/>
-          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedInvoiceItems[item]" :label="item" v-else-if="item != 'id'" clearable/>
+          <q-input :rules="[val => !!val || 'Field is required']" type='number' v-model="selectedInvoiceItems[item]" :label="item" v-else-if="item != 'id' && item != 'created_at'" clearable/>
         </q-item>
         <q-item>
           <q-btn color="primary" label="Add invoice item" @click="saveItemInvoice"/>
@@ -176,6 +172,7 @@ export default {
     selectedInvoiceItemsComp() {
       return this.selectedInvoiceItems[0]
     }
+
   },
   methods: {
     ...mapActions("invoice", ["updateItem","updateSelected","createItem",
@@ -197,16 +194,20 @@ export default {
       this.setDialogVisible(!this.dialogVisible)
     },
     onDeleteItemClicked() {
-      if(this.selected[0])
+      if(this.selected[0]){
         this.deleteItem(this.selected[0])
-      else if(this.selectedInvoiceItems[0])
+        this.fetchPaginated(this.forPagination)
+      }else if(this.selectedInvoiceItems[0]){
         this.deleteInvoiceItem(this.selectedInvoiceItems[0])
-      else{
+        this.fetchPaginatedInvoiceItem(this.forPaginationInvoiceItem)
+      }else{
         this.$q.notify({
           message:"Something went wrong",
           color: "negative"
         })
       }
+
+      this.setDialogVisible(false)
     },
     updateInvoice() {
       this.error = false
@@ -217,6 +218,9 @@ export default {
 
       if(!this.error)
         this.updateItem(this.selected[0])
+      
+      this.fetchPaginated(this.forPagination)
+      
     },
     updateItemInvoice() {
       this.error = false
@@ -227,6 +231,8 @@ export default {
 
       if(!this.error)
         this.updateInvoiceItem(this.selectedInvoiceItems[0])
+
+      this.fetchPaginatedInvoiceItem(this.forPaginationInvoiceItem)
     },
     addMode() {
 
@@ -235,7 +241,6 @@ export default {
         {
           "rows": {
             "client": "",
-            "created_at": "",
             "invoice_amount": "",
             "invoice_amount_plus_vat" : "",
             "invoice_date": "",
@@ -255,8 +260,7 @@ export default {
           "rows": {
             "invoice_id": "",
             "name": "",
-            "amount": "",
-            "created_at" : ""
+            "amount": ""
           }
         }
       
@@ -267,7 +271,7 @@ export default {
     saveInvoice() {
       this.error = false
       Object.keys(this.selected).forEach(key => {
-        if(this.selected[key] == "")
+        if(this.selected[key] == "" && key != "created_at" && key != "invoice_amount_plus_vat")
           this.error = true
       })
 
@@ -275,13 +279,14 @@ export default {
       {
         this.createItem(this.selected)
         this.fetchPaginated(this.forPagination)
+        
       }
       
     },
     saveItemInvoice() {
       this.error = false
       Object.keys(this.selectedInvoiceItems).forEach(key => {
-        if(this.selectedInvoiceItems[key] == "")
+        if(this.selectedInvoiceItems[key] == "" && key != "created_at")
           this.error = true
       })
 

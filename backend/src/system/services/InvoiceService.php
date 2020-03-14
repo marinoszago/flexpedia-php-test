@@ -223,7 +223,7 @@ class InvoiceService {
             && isset($data["vat_rate"]) 
             && isset($data["invoice_status"]) 
             && isset($data["invoice_date"]) 
-            && isset($data["created_at"]))
+            )
         {
             $query = "INSERT INTO " .$invoice->getTableName()."
                     ( 
@@ -247,13 +247,16 @@ class InvoiceService {
                     )";
             $stmt = $dbConn->prepare($query);
 
+            $date = new DateTime();
+            $date = $date->format('Y-m-d H:i:s');
+
             $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
             $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
             $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
             $stmt->bindParam(':vat_rate', $data["vat_rate"]);
             $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
             $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
-            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
+            $stmt->bindParam(':created_at', $date);
 
             $stmt->execute();
 
@@ -286,7 +289,7 @@ class InvoiceService {
             && isset($data["vat_rate"]) 
             && isset($data["invoice_status"]) 
             && isset($data["invoice_date"]) 
-            && isset($data["created_at"]))
+            )
         {
             $query = "UPDATE ".$invoice->getTableName()." SET 
                     client = :client,
@@ -294,20 +297,18 @@ class InvoiceService {
                     invoice_amount_plus_vat = :invoice_amount_plus_vat,
                     vat_rate = :vat_rate,
                     invoice_status = :invoice_status,
-                    invoice_date = :invoice_date,
-                    created_at = :created_at
+                    invoice_date = :invoice_date
                 WHERE id = :id";
 
             $stmt = $dbConn->prepare($query);
 
             $stmt->bindParam(':id', $data["id"]);
-            $stmt->bindParam(':client', $data["client"], PDO::PARAM_STR);
+            $stmt->bindParam(':client', $data["client"]);
             $stmt->bindParam(':invoice_amount', $data["invoice_amount"]);
             $stmt->bindParam(':invoice_amount_plus_vat', $data["invoice_amount_plus_vat"]);
             $stmt->bindParam(':vat_rate', $data["vat_rate"]);
-            $stmt->bindParam(':invoice_status', $data["invoice_status"], PDO::PARAM_STR);
-            $stmt->bindParam(':invoice_date', $data["invoice_date"], PDO::PARAM_STR);
-            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
+            $stmt->bindParam(':invoice_status', $data["invoice_status"]);
+            $stmt->bindParam(':invoice_date', $data["invoice_date"]);
 
             $stmt->execute();
 

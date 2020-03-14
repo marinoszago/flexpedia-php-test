@@ -206,7 +206,6 @@ class InvoiceItemService {
         if(isset($data["name"]) 
             && isset($data["invoice_id"]) 
             && isset($data["amount"]) 
-            && isset($data["created_at"]) 
         )
         {
             $query = "INSERT INTO " .$invoiceItem->getTableName()."
@@ -227,10 +226,13 @@ class InvoiceItemService {
                     )";
             $stmt = $dbConn->prepare($query);
 
+            $date = new DateTime();
+            $date = $date->format('Y-m-d H:i:s');
+
             $stmt->bindParam(':name', $data["name"], PDO::PARAM_STR);
             $stmt->bindParam(':invoice_id', $data["invoice_id"]);
             $stmt->bindParam(':amount', $data["amount"]);
-            $stmt->bindParam(':created_at', $data["created_at"]);
+            $stmt->bindParam(':created_at', $date);
 
             $stmt->execute();
 
@@ -260,14 +262,12 @@ class InvoiceItemService {
             && isset($data["name"]) 
             && isset($data["invoice_id"]) 
             && isset($data["amount"]) 
-            && isset($data["created_at"]) 
         )
         {
             $query = "UPDATE ".$invoiceItem->getTableName()." SET 
                     name = :name,
                     invoice_id = :invoice_id,
-                    amount = :amount,
-                    created_at = :created_at
+                    amount = :amount
                 WHERE id = :id";
 
             $stmt = $dbConn->prepare($query);
@@ -276,7 +276,6 @@ class InvoiceItemService {
             $stmt->bindParam(':name', $data["name"], PDO::PARAM_STR);
             $stmt->bindParam(':invoice_id', $data["invoice_id"]);
             $stmt->bindParam(':amount', $data["amount"]);
-            $stmt->bindParam(':created_at', $data["created_at"], PDO::PARAM_STR);
 
             $stmt->execute();
 

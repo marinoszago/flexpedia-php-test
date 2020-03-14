@@ -100,6 +100,8 @@ export default {
             Object.keys(updateData).forEach(key => {
                 params[key] = updateData[key]
             })
+            
+            params["invoice_amount_plus_vat"] = parseFloat(params["invoice_amount"]) + ((parseFloat(params["invoice_amount"]) * parseFloat(params["vat_rate"]))/ 100) 
 
             data["params"] = params
             data["url"] = "invoices/request.php"
@@ -112,7 +114,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Updated successfully",
+                            message: "Updated successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })
@@ -138,7 +140,7 @@ export default {
                 params[key] = createData[key]
             })
 
-
+            params["invoice_amount_plus_vat"] = parseFloat(params["invoice_amount"]) + ((parseFloat(params["invoice_amount"]) * parseFloat(params["vat_rate"]))/ 100) 
             data["params"] = params
             data["url"] = "invoices/request.php"
             
@@ -149,7 +151,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Created successfully. Refresh the page",
+                            message: "Created successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })
@@ -185,7 +187,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Deleted successfully",
+                            message: "Deleted successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })

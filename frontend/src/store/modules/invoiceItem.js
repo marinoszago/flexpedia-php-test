@@ -112,7 +112,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Updated successfully",
+                            message: "Updated successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })
@@ -149,7 +149,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Created successfully. Refresh the page",
+                            message: "Created successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })
@@ -185,7 +185,7 @@ export default {
                     setTimeout(function() {
                         Loading.hide()
                         Notify.create({
-                            message: "Deleted successfully",
+                            message: "Deleted successfully. Refresh the page to see the changes",
                             position: "top",
                             color: "positive"
                         })

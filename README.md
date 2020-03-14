@@ -54,6 +54,7 @@ The application should open and you should see the Home page.
 Inside the project you can see two folders:
 * Frontend - The front end interface of the web application using Vue and Quasar
 * Backend - The back end of the web application using PHP 
+* images - Contains a few images of the interface
 
 The build application folder exists in: 
 ```
@@ -71,6 +72,12 @@ Additionally inside:
 xampp/htdocs/flexpedia-php-test/backend/src
 ```
 lies the code for the backend of the application and the API that is used.
+
+You can perform Create, Update, List and Delete operations on both tables by selecting each row.
+You can search for a client or a name in the two respected folders while also you can handle the pagination.
+
+All the above are performed on the server.
+
 
 ### Installation
 In case you want to rebuild the application you need to have the following installed: 

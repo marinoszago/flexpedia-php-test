@@ -36,11 +36,19 @@ xampp/htdocs/flexpedia-php-test/backend/src/resources
 ```
 so be sure to import it first if it is not installed.
 
+The database configuration .ini file is stored in:
+```
+xampp/htdocs/flexpedia-php-test/backend/src/system/database/config
+```
+and holds information about the connection of the database.
+
+Both the frontend and the backend will listen to localhost on their respected ports.
+
 To run the application open xampp start apache and phpmyadmin and then open your favorite browser (mine is chrome) and paste the following link and hit enter: 
 ```
 http://localhost/flexpedia-php-test/frontend/dist/spa/
 ```
-The application should open and see Home screen.
+The application should open and you should see the Home page.
 
 ### Information about the project
 Inside the project you can see two folders:
@@ -76,6 +84,11 @@ After you installed node.js open Node.js Command line and type:
 ```
 
 after that cd into the project's folder inside frontend and type:
+```
+ quasar build
+```
+
+to run it in development mode type: 
 ```
  quasar dev
 ```

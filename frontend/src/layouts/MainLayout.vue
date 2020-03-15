@@ -55,12 +55,12 @@
     </q-drawer>
 
     <q-drawer
-      v-model="rightDrawerOpen"
+      v-model="this.rightDrawerVisible"
       show-if-above
       bordered
       content-class="bg-grey-1"
       side="right"
-      v-if="rightDrawerOpen"
+      v-if="this.rightDrawerVisible"
     >
       <q-list v-if="this.selected.length > 0 && this.selectedInvoiceItems.length == 0">
         <q-item v-for="(item, index) in selectedItems" :key="index" >
@@ -128,7 +128,6 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
-      rightDrawerOpen: false,
       dialogConfirmOpen: false, 
       errorMsg: 'You cannot save the form not all data are filled',
       error: false,
@@ -155,17 +154,14 @@ export default {
     }
   },
   mounted() {
-     this.rightDrawerOpen = false
-     this.dialogConfirmOpen = false
+    this.setRightDrawerVisible(false)
   },
   created() {
-     this.rightDrawerOpen = false
-     this.dialogConfirmOpen = false
   },
   computed: {
     ...mapState("invoice", ["selected","forPagination"]),
     ...mapState("invoiceItem", ["selectedInvoiceItems","forPaginationInvoiceItem"]),
-    ...mapState(["dialogVisible"]),
+    ...mapState(["dialogVisible", "rightDrawerVisible"]),
     selectedItems() {
       return this.selected[0]
     },
@@ -181,14 +177,14 @@ export default {
     ...mapActions("invoiceItem", ["updateInvoiceItem","updateSelectedInvoiceItem","createInvoiceItem",
                               "fetchPaginatedInvoiceItem","exportDataToCsvItems","clearSelectedInvoiceItem",
                               "deleteInvoiceItem"]),
-    ...mapActions(["setDialogVisible"]),                          
+    ...mapActions(["setDialogVisible", "setRightDrawerVisible"]),                          
     editMode() {
       this.clearSelectedInvoiceItem()
-      this.rightDrawerOpen = !this.rightDrawerOpen
+      this.setRightDrawerVisible(!this.rightDrawerVisible)
     },
     editModeInvoice() {
       this.clearSelected()
-      this.rightDrawerOpen = !this.rightDrawerOpen
+      this.setRightDrawerVisible(!this.rightDrawerVisible)
     },
     deleteMode() {
       this.setDialogVisible(!this.dialogVisible)
@@ -248,8 +244,7 @@ export default {
             "vat_rate": ""
           }
         }
-      
-      this.rightDrawerOpen = !this.rightDrawerOpen
+      this.setRightDrawerVisible(!this.rightDrawerVisible)
 
       this.updateSelected(data)
     },
@@ -263,8 +258,7 @@ export default {
             "amount": ""
           }
         }
-      
-      this.rightDrawerOpen = !this.rightDrawerOpen
+      this.setRightDrawerVisible(!this.rightDrawerVisible)
 
       this.updateSelectedInvoiceItem(data)
     },

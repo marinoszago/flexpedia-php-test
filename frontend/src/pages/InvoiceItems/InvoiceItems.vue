@@ -77,7 +77,7 @@ export default {
     },
     methods: {
         ...mapActions("invoiceItem", ['fetchPaginatedInvoiceItem','getRowCount', 'updateSelectedInvoiceItem','clearSelectedInvoiceItem']),
-        ...mapActions(["setDialogVisible"]),
+        ...mapActions(["setDialogVisible", "setRightDrawerVisible"]),
         onRequest (props) {
 
             var ref = this
@@ -149,6 +149,7 @@ export default {
     },
     mounted(){
         this.getRowCount()
+        this.setRightDrawerVisible(false)
     },
     created() {
         this.onRequest({

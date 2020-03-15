@@ -6,16 +6,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     modules,
     state: {
-        dialogVisible: false
+        dialogVisible: false,
+        rightDrawerVisible: false
     },
     actions: {
         setDialogVisible (context, data){
             context.commit("SET_DIALOG_VISIBLE", data)
+        },
+        setRightDrawerVisible (context, data){
+            context.commit("SET_RIGHT_DRAWER_VISIBLE", data)
         }
     },
     mutations: {
         SET_DIALOG_VISIBLE: (state, data) => {
             Vue.set(state, "dialogVisible", data)
+        },
+        SET_RIGHT_DRAWER_VISIBLE: (state, data) => {
+            Vue.set(state, "rightDrawerVisible", data)
         }
     }
 })
